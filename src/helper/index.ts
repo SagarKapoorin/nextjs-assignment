@@ -24,7 +24,7 @@ export async function create(formData: FormData):Promise<ActionResponse> {
     const newTask = new Task(data);
     await newTask.save()
     //clearHash;
-    clearHash("Task.find().sort({ createdAt: -1 }).lean()","Task");
+    await clearHash("Task.find().sort({ createdAt: -1 }).lean()","Task");
     revalidatePath('/');
     return { success: true, message: 'Task created successfully' };
   } catch (error) {
@@ -74,7 +74,7 @@ console.log(data);
       return { success: false, message: 'Task not found' };
     }
      //clearHash;
-     clearHash("Task.find().sort({ createdAt: -1 }).lean()","Task");
+     await clearHash("Task.find().sort({ createdAt: -1 }).lean()","Task");
     revalidatePath('/');
     return { success: true, message: 'Task updated successfully' };
   } catch (error){
@@ -95,7 +95,7 @@ export async function deleteTask(id: string): Promise<ActionResponse> {
       return { success: false, message: 'Task not found' };
     }
      //clearHash;
-     clearHash("Task.find().sort({ createdAt: -1 }).lean()","Task");
+    await clearHash("Task.find().sort({ createdAt: -1 }).lean()","Task");
     revalidatePath('/');
     return { success: true, message: 'Task deleted successfully' };
   } catch (error) {

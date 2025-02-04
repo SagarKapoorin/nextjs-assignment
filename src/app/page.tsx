@@ -1,5 +1,5 @@
 "use client";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useLayoutEffect } from "react";
 import { PlusCircle, Calendar, CheckCircle2, XCircle, LayoutGrid, ListTodo, Clock, CheckCircle } from "lucide-react";
 import { Task, NewTask } from "@/types/task";
 
@@ -17,37 +17,95 @@ export default function Home(){
     const [task_state,set_task_state]=useState<'all'|'pending'|'completed'>('all');
     // console.log(task_state)
   const [viewMode,setViewMode]=useState<'grid'|'list'>('grid');
-
+  useLayoutEffect(()=>{
+    fetch("http://localhost:3000/api/tasks/")
+      .then(response => response.json())
+      .then(data => {
+      if (!data.success) {
+        console.error("Error fetching tasks:", data.message);
+        return;
+      }
+      console.log(data);
+      setTasks(data.tasks);
+      })
+      .catch(error => console.error("Error fetching tasks:", error));
+  },[])
   const handleChange=(e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement>):void => {
-    console.log(e.target)
+    // console.log(e.target)
     const { id, value }=e.target;
-    console.log(id,value)
+    // console.log(id,value)
     setnewtask((prev)=>({...prev,[id]: value,}));
   };
 
   const addTask=():void => {
     if (!new_task.title.trim()) return;
-    const task:Task = {
-      id: Math.random().toString(36).substring(2, 9),...new_task,completed: false,
-    };
-    // console.log(task)
-    setTasks((prev) => [...prev, task]);
-    setnewtask(init);
-    setopenbox(false);
+    fetch("http://localhost:3000/api/tasks/", {
+      method: "POST",
+      headers: {
+      "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+      title: new_task.title,
+      description: new_task.description,
+      dueDate: new Date(new_task.dueDate),
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+      if (!data.success) {
+        console.error("Error adding task:", data.message);
+        return;
+      }
+      const task: Task = {_id:data._id,...new_task,completed:false};
+      console.log("Task added successfully:", data.message);
+      setTasks((prev) => [...prev, task]);
+      setnewtask(init);
+      setopenbox(false);
+      })
+      .catch(error => console.error("Error adding task:", error));
   };
 
   const toggle_it = (taskId: string): void => {
+    console.log(taskId);
+  fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+    method: 'PUT',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ Completed: !tasks.find(task => task._id === taskId)?.completed }),
+  })
+    .then(response => response.json())
+    .then(data => {
+    if (!data.success) {
+      console.error("Error updating task:", data.message);
+      return;
+    }
+    console.log("Task updated successfully:", data.message);
+    })
+    .catch(error => console.error("Error updating task:", error));
     setTasks((prev) =>
       prev.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
+        task._id === taskId ? { ...task, completed: !task.completed } : task
       )
     );
   };
 
   const deleteTask = (taskId: string): void => {
-    setTasks((prev) => prev.filter((task) => task.id !== taskId));
+    setTasks((prev) => prev.filter((task) => task._id !== taskId));
     console.log(tasks);
     console.log(taskId);
+    fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+      method: 'DELETE',
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.success) {
+          console.error("Error deleting task:", data.message);
+          return;
+        }
+        console.log("Task deleted successfully:", data.message);
+      })
+      .catch(error => console.error("Error deleting task:", error));
   };
 
   const filteredTasks = tasks.filter(task => {
@@ -158,9 +216,9 @@ export default function Home(){
           </div>
           {viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredTasks.map((task) => (
+              {filteredTasks.map((task, index) => (
                 <div
-                  key={task.id}
+                  key={task._id || index}
                   className={`p-6 rounded-lg shadow-sm transition-all duration-300 hover:shadow-lg ${
                     task.completed
                       ? "bg-gray-50 dark:bg-gray-800"
@@ -177,7 +235,7 @@ export default function Home(){
                       </h3>
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => toggle_it(task.id)}
+                        onClick={() => toggle_it(task._id)}
                         className="p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full"
                       >
                             {task.completed ? (
@@ -187,7 +245,7 @@ export default function Home(){
                         )}
                       </button>
          <button
-                        onClick={() => deleteTask(task.id)}
+                        onClick={() => deleteTask(task._id)}
                         className="p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full"
                       >
                         <XCircle className="h-5 w-5 text-red-500" />
@@ -206,7 +264,8 @@ export default function Home(){
                   <div className="flex items-center">
                     <Calendar className="h-4 w-4 mr-2 text-gray-500" />
                     <span className="text-sm bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded-md">
-                      {task.dueDate}
+
+                    {new Date(task.dueDate).toLocaleDateString("en-IN")}
                     </span>
                   </div>
                 </div>
@@ -216,7 +275,7 @@ export default function Home(){
             <div className="space-y-4">
               {filteredTasks.map((task) => (
                 <div
-                  key={task.id}
+                  key={task._id}
                   className={`p-4 rounded-lg shadow-sm transition-all duration-300 hover:shadow-lg ${
                     task.completed
                       ? "bg-gray-50 dark:bg-gray-800"
@@ -226,7 +285,7 @@ export default function Home(){
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <button
-                        onClick={() => toggle_it(task.id)}
+                        onClick={() => toggle_it(task._id)}
                         className="p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full"
                       >
                         {task.completed ? (
@@ -252,11 +311,11 @@ export default function Home(){
                       <div className="flex items-center">
                         <Calendar className="h-4 w-4 mr-2 text-gray-500" />
                         <span className="text-sm bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded-md">
-                          {task.dueDate}
+                        {new Date(task.dueDate).toLocaleDateString("en-IN")}
                         </span>
                       </div>
                       <button
-                        onClick={()=>deleteTask(task.id)}
+                        onClick={()=>deleteTask(task._id)}
                         className="p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full"
                       >
                         <XCircle className="h-5 w-5 text-red-500" />
