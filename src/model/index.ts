@@ -5,7 +5,7 @@ export interface Task_Schema extends Document {
   title: string;
   description?: string;
   dueDate?: Date;
-  Completed?: boolean;
+  completed?: boolean;
   createdAt: Date;
 }
 
@@ -22,7 +22,7 @@ const TaskSchema = new mongoose.Schema<Task_Schema>({
   dueDate: {
     type: Date
   },
-  Completed: {
+  completed: {
     type: Boolean,
     default: false
   },

@@ -63,7 +63,7 @@ export async function update(id: string, updates: Partial<Task_Schema>): Promise
     if (updates.dueDate !== undefined){
          data.dueDate = updates.dueDate;
     }
-    if (updates.Completed !== undefined)data.Completed=updates.Completed;
+    if (updates.completed !== undefined)data.completed=updates.completed;
 console.log(data);
     const update_Task=await Task.findByIdAndUpdate(id, data, {
       new: true,
