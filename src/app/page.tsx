@@ -83,7 +83,7 @@ export default function Home(){
         console.error("Error adding task:", data.message);
         return;
       }
-      const task: Task = {_id:data._id,...new_task,completed:false};
+      const task: Task = {_id:data._id,...new_task,Completed:false};
       console.log("Task added successfully:", data.message);
       setTasks((prev) => [...prev, task]);
       setnewtask(init);
@@ -100,7 +100,7 @@ export default function Home(){
     headers: {
     'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ Completed: !tasks.find(task => task._id === taskId)?.completed }),
+    body: JSON.stringify({ Completed: !tasks.find(task => task._id === taskId)?.Completed }),
   })
     .then(response => response.json())
     .then(data => {
@@ -113,7 +113,7 @@ export default function Home(){
     .catch(error => console.error("Error updating task:", error));
     setTasks((prev) =>
       prev.map((task) =>
-        task._id === taskId ? { ...task, completed: !task.completed } : task
+        task._id === taskId ? { ...task, completed: !task.Completed } : task
       )
     );
   };
@@ -137,16 +137,16 @@ export default function Home(){
   };
 
   const filteredTasks = tasks.filter(task => {
-    if (task_state === 'completed') return task.completed;
-    if (task_state === 'pending') return !task.completed;
+    if (task_state === 'completed') return task.Completed;
+    if (task_state === 'pending') return !task.Completed;
     return true;
     // console.log(stats)
   });
 
   const stats={
     total: tasks.length,
-    completed: tasks.filter(t => t.completed).length,
-    pending: tasks.filter(t => !t.completed).length
+    completed: tasks.filter(t => t.Completed).length,
+    pending: tasks.filter(t => !t.Completed).length
   };
   // console.log(stats)
   const useMediaQuery = (width:string) =>
@@ -274,14 +274,14 @@ export default function Home(){
               <div
               key={task._id || index}
               className={`p-6 rounded-lg shadow-sm transition-all duration-300 hover:shadow-lg min-w-[300px] ${
-              task.completed
+              task.Completed
                 ? "bg-gray-50 dark:bg-gray-800"
                 : "bg-white dark:bg-gray-700"
               }`}>
                 <div className="flex items-start justify-between mb-4">
                 <h3
                 className={`text-xl font-semibold ${
-                task.completed
+                task.Completed
                 ? "text-gray-500 line-through"
                 : "text-gray-900 dark:text-white"
                 }`}>
@@ -306,7 +306,7 @@ export default function Home(){
                 onClick={() => toggle_it(task._id)}
                 className="p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full"
                 >
-                {task.completed ? (
+                {task.Completed ? (
                 <CheckCircle2 className="h-4 w-4 text-green-500" />
                 ) : (
                 <CheckCircle2 className="h-4 w-4 text-gray-400" />
@@ -322,7 +322,7 @@ export default function Home(){
               </div>
               <p
               className={`mb-4 ${
-                task.completed
+                task.Completed
                 ? "text-gray-500"
                 : "text-gray-600 dark:text-gray-300"
               }`}
@@ -345,7 +345,7 @@ export default function Home(){
                 <div
                   key={task._id}
                   className={`p-4 rounded-lg shadow-sm transition-all duration-300 hover:shadow-lg ${
-                    task.completed
+                    task.Completed
                       ? "bg-gray-50 dark:bg-gray-800"
                       : "bg-white dark:bg-gray-700"
                   }`}
@@ -370,7 +370,7 @@ export default function Home(){
                         onClick={() => toggle_it(task._id)}
                         className="p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full"
                       >
-                        {task.completed ? (
+                        {task.Completed ? (
                           <CheckCircle2 className="h-4 w-4 text-green-500" />
                         ) : (
                           <CheckCircle2 className="h-4 w-4 text-gray-400" />
@@ -379,7 +379,7 @@ export default function Home(){
                       <div>
                         <h3
                           className={`text-lg font-semibold ${
-                            task.completed
+                            task.Completed
                               ? "text-gray-500 line-through"
                               : "text-gray-900 dark:text-white"
                           }`}

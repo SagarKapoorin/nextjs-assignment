@@ -4,7 +4,7 @@ export interface Task {
     title: string;
     description: string;
     dueDate: string;
-    completed: boolean;
+    Completed: boolean;
   }
   //new task id->default random string
   export interface NewTask {
