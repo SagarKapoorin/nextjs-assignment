@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task Management App
 
-## Getting Started
+## Live Demo
+[Task Management App](https://nextjs-assignment-flame.vercel.app/)
 
-First, run the development server:
+## GitHub Repository
+[GitHub - SagarKapoorin](https://github.com/SagarKapoorin/nextjs-assignment)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Author
+Sagar Kapoor
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Overview
+This is a Task Management application built using **Next.js (latest version)** for both frontend and backend, with **MongoDB** for data persistence and **Redis** for optimization. The app allows users to:
+- Create, read, update, and delete tasks (CRUD operations).
+- Mark tasks as complete or incomplete.
+- Store task details such as title, description, and due date.
+- Handle errors and loading states efficiently.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
+- **Frontend:** Next.js (App Router & Server Actions)
+- **Backend:** Next.js Server Actions
+- **Database:** MongoDB
+- **Caching:** Redis (for optimization)
+- **Deployment:** Vercel
+- **Language:** TypeScript
 
-## Learn More
+## API Routes
+The application provides the following API endpoints:
 
-To learn more about Next.js, take a look at the following resources:
+### 1. `GET /api/task`
+- Fetches all tasks from the database.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. `POST /api/task`
+- Creates a new task with provided details (title, description, due date).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. `PUT /api/task/:id`
+- Updates an existing task by its ID.
+- Allows marking tasks as complete/incomplete.
 
-## Deploy on Vercel
+### 4. `DELETE /api/task/:id`
+- Deletes a task by its ID.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Installation & Setup
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/SagarKapoorin/nextjs-assignment.git
+   cd nextjs-assignment
+   ```
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+3. **Set up environment variables:**
+   Create a `.env.local` file and add:
+   ```env
+   MONGODB_URI=your_mongodb_connection_string
+   REDIS_URL=your_redis_connection_string
+   ```
+4. **Run the development server:**
+   ```sh
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+The application is deployed on **Vercel** and can be accessed [here](https://nextjs-assignment-flame.vercel.app/).
+
+## Features
+✅ Task CRUD operations  
+✅ Mark tasks as complete/incomplete  
+✅ MongoDB for data storage  
+✅ Redis for caching and performance optimization  
+✅ Error handling and loading states  
+✅ Built with Next.js and TypeScript  
+
+## License
+This project is licensed under the **MIT License**.
+
+---
+Made with ❤️ by **Sagar Kapoor**
+
