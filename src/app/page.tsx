@@ -20,7 +20,7 @@ export default function Home(){
   const [editingId, setEditingId] = useState<string | null>(null);
   const [sidebar_collapse,setcollapse]=useState<boolean>(false);
   useLayoutEffect(()=>{
-    fetch("http://localhost:3000/api/tasks/")
+    fetch("https://nextjs-assignment-flame.vercel.app/api/tasks/")
       .then(response => response.json())
       .then(data => {
       if (!data.success) {
@@ -41,7 +41,7 @@ export default function Home(){
   const addTask=():void => {
     if (editingId) {
       // Update existing task
-      fetch(`http://localhost:3000/api/tasks/${editingId}`, {
+      fetch(`https://nextjs-assignment-flame.vercel.app/api/tasks/${editingId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -66,7 +66,7 @@ export default function Home(){
         .catch(error => console.error("Error updating task:", error));
     } else {
     if (!new_task.title.trim()) return;
-    fetch("http://localhost:3000/api/tasks/", {
+    fetch("https://nextjs-assignment-flame.vercel.app/api/tasks/", {
       method: "POST",
       headers: {
       "Content-Type": "application/json",
@@ -95,7 +95,7 @@ export default function Home(){
 
   const toggle_it = (taskId: string): void => {
     console.log(taskId);
-  fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+  fetch(`https://nextjs-assignment-flame.vercel.app/api/tasks/${taskId}`, {
     method: 'PUT',
     headers: {
     'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ export default function Home(){
     setTasks((prev) => prev.filter((task) => task._id !== taskId));
     console.log(tasks);
     console.log(taskId);
-    fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+    fetch(`https://nextjs-assignment-flame.vercel.app/api/tasks/${taskId}`, {
       method: 'DELETE',
     })
       .then(response => response.json())
