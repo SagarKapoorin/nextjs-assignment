@@ -19,7 +19,6 @@ export default function Home(){
   const [viewMode,setViewMode]=useState<'grid'|'list'>('grid');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [sidebar_collapse,setcollapse]=useState<boolean>(false);
-  const [sidebar,setsidebar]=useState<boolean>(false);
   useLayoutEffect(()=>{
     fetch("http://localhost:3000/api/tasks/")
       .then(response => response.json())

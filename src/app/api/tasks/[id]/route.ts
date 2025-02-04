@@ -1,7 +1,7 @@
 import { deleteTask, update } from "@/helper";
 
-export async function PUT(request:Request,  { params }: { params: {id: string } }){
-    const { id }=await params;
+export async function PUT(request:Request,  { params }: { params: Promise<{id: string }> }){
+    const { id } = await params;
     const data=await request.json(); //eg title:lka
     const result=await update(id,data);
     if(result.success){
@@ -26,8 +26,8 @@ export async function PUT(request:Request,  { params }: { params: {id: string } 
         )
     }
 }
-export async function DELETE(request:Request,{params}:{params:{id:string}}) {
-    const  { id }=await params;
+export async function DELETE(request:Request,{ params }: { params: Promise<{id: string }>}) {
+    const { id } = await params;
     const result=await deleteTask(id);
     if(result.success){
         return Response.json(

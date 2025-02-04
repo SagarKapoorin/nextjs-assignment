@@ -1,8 +1,9 @@
 //get and post route
+
 import { setCache } from "@/lib/redis";
 import { create } from "@/helper";
 
-export async function GET(request:Request){
+export async function GET(){
     try {
         const tasks = await setCache("Task.find().sort({ createdAt: -1 }).lean()","Task");
         return Response.json(

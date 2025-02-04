@@ -1,5 +1,4 @@
 import { get } from "@/helper";
-import { FilterQuery, Query } from "mongoose";
 import { Error } from "mongoose";
 
 import { createClient } from "redis";
